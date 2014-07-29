@@ -74,7 +74,7 @@ public class MyLetterListView extends View {
 		case MotionEvent.ACTION_DOWN:
 			showBkg = true;
 			if (oldChoose != c && listener != null) {
-				if (c >= 0 && c <= b.length) {
+				if (c >= 0 && c < b.length) {
 					listener.onTouchingLetterChanged(b[c]);
 					choose = c;
 					invalidate();
@@ -83,7 +83,7 @@ public class MyLetterListView extends View {
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (oldChoose != c && listener != null) {
-				if (c >= 0 && c <= b.length) {
+				if (c >= 0 && c < b.length) {
 					listener.onTouchingLetterChanged(b[c]);
 					choose = c;
 					invalidate();

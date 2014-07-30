@@ -273,7 +273,7 @@ public class MainActivity extends Activity {
 		overlay = (TextView) inflater.inflate(R.layout.overlay, null);
 		overlay.setVisibility(View.INVISIBLE);
 		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.TYPE_APPLICATION,
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

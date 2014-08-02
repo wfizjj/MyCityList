@@ -49,6 +49,7 @@ public class MyLetterListView extends View {
 			paint.setColor(Color.parseColor("#515151"));
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
+			paint.setTextSize(20f);
 			if (i == choose) {
 				paint.setColor(Color.parseColor("#3399ff"));
 				paint.setFakeBoldText(true);

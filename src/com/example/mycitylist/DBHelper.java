@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 	// 用户数据库文件的版本
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 3;
 	// 数据库文件目标存放路径为系统默认位置，cn.arthur.examples 是你的包名
 	private static String DB_PATH = "/data/data/com.example.mycitylist/databases/";
 	/*

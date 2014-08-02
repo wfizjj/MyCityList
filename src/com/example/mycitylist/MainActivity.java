@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.example.mycitylist.MyLetterListView.OnTouchingLetterChangedListener;
 
 import android.app.Activity;
@@ -17,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +34,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	private LocationClient mLocationClient = null;
+	private BDLocationListener myListener = new MyLocationListener();
+	
+	private LocationMode tempMode = LocationMode.Hight_Accuracy;
+	private String tempcoor = "gcj02";
+	
 	private BaseAdapter adapter;
 	private ListView listView;
 	private TextView overlay; // 对话框首字母textView
@@ -38,6 +50,8 @@ public class MainActivity extends Activity {
 	private OverlayThread overlayThread; // 显示首字母对话框
 	private ArrayList<City> allCityLists; // 所有城市列表
 	private ArrayList<City> cityLists;// 城市列表
+	
+	private String lngCityName = "正在定位所在位置..";
 
 	ListAdapter.TopViewHolder topViewHolder;
 
@@ -57,6 +71,21 @@ public class MainActivity extends Activity {
 		initOverlay();
 		hotCityInit();
 		setAdapter(allCityLists);
+		
+		mLocationClient = new LocationClient(getApplicationContext());
+		mLocationClient.registerLocationListener(myListener);
+		InitLocation();
+		mLocationClient.start();
+		mLocationClient.requestLocation();
+	}
+	
+	private void InitLocation(){
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(tempMode);//设置定位模式
+		option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
+		option.setScanSpan(5000);//设置发起定位请求的间隔时间为5000ms
+		option.setIsNeedAddress(true);
+		mLocationClient.setLocOption(option);
 	}
 
 	public void hotCityInit() {
@@ -95,7 +124,7 @@ public class MainActivity extends Activity {
 		ArrayList<City> list = new ArrayList<City>();
 		try {
 			dbHelper.createDataBase();
-			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
 			Cursor cursor = db.rawQuery("select * from city", null);
 			City city;
 			while (cursor.moveToNext()) {
@@ -206,7 +235,7 @@ public class MainActivity extends Activity {
 					topViewHolder = (TopViewHolder) convertView.getTag();
 				}
 
-				topViewHolder.name.setText("正在定位所在位置..");
+				topViewHolder.name.setText(lngCityName);
 				topViewHolder.alpha.setVisibility(View.VISIBLE);
 				topViewHolder.alpha.setText("定位城市");
 			} else if (viewType == 2) {
@@ -331,5 +360,22 @@ public class MainActivity extends Activity {
 		} else {
 			return "#";
 		}
+	}
+	
+	/**
+	 * 实现实位回调监听
+	 */
+	public class MyLocationListener implements BDLocationListener{
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			// TODO Auto-generated method stub
+			if (topViewHolder.name != null) {
+				lngCityName = location.getCity();
+				adapter.notifyDataSetChanged();
+				mLocationClient.stop();
+			}
+		}
+		
 	}
 }

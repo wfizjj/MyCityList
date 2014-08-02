@@ -13,8 +13,9 @@
         android:background="@drawable/cityhot_edittext_bg"
         android:drawableLeft="@drawable/wb_search_icon"
         android:padding="10dip"
-        android:text="请输入城市名称"
+        android:hint="请输入城市名称"
         android:textColor="#515151"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:singleLine="true" />
 
 </LinearLayout>
